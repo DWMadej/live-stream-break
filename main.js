@@ -17,7 +17,14 @@ let mainWindowTwo
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 860, height: 795, webPreferences: { nodeIntegration: true } })
+  mainWindow = new BrowserWindow({ 
+    width: 860, 
+    height: 795, 
+    webPreferences: { 
+      nodeIntegration: true,
+      contextIsolation: false
+    } 
+  })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -40,7 +47,14 @@ function createWindow() {
 
 function createWindowTwo() {
   // Create the browser window.
-  mainWindowTwo = new BrowserWindow({ width: 1280, height: 720, webPreferences: { nodeIntegration: true } })
+  mainWindowTwo = new BrowserWindow({ 
+    width: 1280, 
+    height: 720, 
+    webPreferences: { 
+      nodeIntegration: true,
+      contextIsolation: false
+    } 
+  })
 
   // and load the index.html of the app.
   mainWindowTwo.loadURL(url.format({
