@@ -1,47 +1,50 @@
 const electron = require('electron');
 const { ipcRenderer } = require('electron');
 const { ipcMain } = require('electron');
-var gsjson = require('google-spreadsheet-to-json');
+const { extractSheets } = require("spreadsheet-to-json");
+// var gsjson = require('google-spreadsheet-to-json');
 
 var dropdown = document.getElementById('talkPicker');
 document.getElementById('spreadsheetIDRefresh').addEventListener('click', function fetchSpreadsheet(e) {
-  console.log(e);
+
   var spreadsheetID = document.getElementById('spreadsheetID').value;
-  console.log(spreadsheetID);
+
   optionDefault = document.createElement('option');
   document.getElementById('talkPicker').options.length = 0;
   optionDefault.text = "Grabbing data, hold tight...";
   dropdown.remove(dropdown[0]);
   dropdown.add(optionDefault, 0);
 
-  gsjson({
-    spreadsheetId: spreadsheetID,
+  extractSheets({
+    spreadsheetKey: spreadsheetID,
+    credentials: 'AIzaSyA9xkY5mOF3a_5kFm26vtUMpcjuhDrTpgo'
     // other options...
   })
-    .then(function (result) {
-      console.log(e.srcElement.value);
-      console.log(result.length);
-      console.log(result);
+    .then(({ Sheet1 }) => {
       optionDefault = document.createElement('option');
       optionDefault.text = "Choose a talk...";
       dropdown.remove(dropdown[0]);
       dropdown.add(optionDefault, 0);
-      for (var i = 0; i < result.length; i++) {
+
+
+      for (var i = 0; i < Sheet1.length; i++) {
         option = document.createElement('option');
-        option.text = result[i].speakerName + ' - ' + result[i].talkTitle;
+        option.text = Sheet1[i]["Speaker Name"] + ' - ' + Sheet1[i]["Talk Title"];
         option.value = i;
-        option.headerText = result[i].headerText;
-        option.eventLogo = result[i].eventLogo;
-        option.talkTitle = result[i].talkTitle;
-        option.speakerName = result[i].speakerName;
-        option.talkTime = result[i].talkTime;
-        option.timeZone = result[i].timeZone;
-        option.speakerImage = result[i].speakerImage;
-        option.brandColour = result[i].brandColour;
+        option.headerText = Sheet1[i]["Header Text"];
+        option.eventLogo = Sheet1[i]["Event Logo"];
+        option.talkTitle = Sheet1[i]["Talk Title"];
+        option.speakerName = Sheet1[i]["Speaker Name"];
+
+        option.talkTime = Sheet1[i]["Talk Time"];
+
+        option.timeZone = Sheet1[i]["Time Zone"];
+        option.speakerImage = Sheet1[i]["Speaker Image"];
+        option.brandColour = Sheet1[i]["Brand Colour"];
         dropdown.add(option);
       }
     })
-    .catch(function (err) {
+    .catch((err) => {
       console.log(err.message);
       console.log(err.stack);
       optionError = document.createElement('option');
@@ -60,14 +63,17 @@ document.getElementById('spreadsheetIDRefresh').addEventListener('click', functi
     document.getElementById('speakerImage').value = e.target.selectedOptions[0].speakerImage;
     document.getElementById('brandColour').value = e.target.selectedOptions[0].brandColour;
 
-    function minTommss(minutes) {
-      var hrs = Math.floor(Math.abs(minutes) * 24);
-      var min = ((minutes * 24) - hrs);
-      var min2 = Math.floor(Math.abs(min) * 60.5);
-      console.log(min);
-      return hrs + ":" + (min2 < 10 ? "0" : "") + min2;
-    }
-    document.getElementById('trackTime').value = minTommss(e.target.selectedOptions[0].talkTime);
+    // function minTommss(minutes) {
+    //   console.log(typeof minutes);
+
+    //   var hrs = Math.floor(Math.abs(minutes) * 24);
+    //   var min = ((minutes * 24) - hrs);
+    //   var min2 = Math.floor(Math.abs(min) * 60.5);
+    //   console.log(min);
+    //   return hrs + ":" + (min2 < 10 ? "0" : "") + min2;
+    // }
+    // document.getElementById('trackTime').value = minTommss(e.target.selectedOptions[0].talkTime);
+    document.getElementById('trackTime').value = e.target.selectedOptions[0].talkTime;
   })
 
 })
