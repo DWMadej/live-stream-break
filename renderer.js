@@ -17,7 +17,8 @@ document.getElementById('spreadsheetIDRefresh').addEventListener('click', functi
 
   extractSheets({
     spreadsheetKey: spreadsheetID,
-    credentials: 'AIzaSyA9xkY5mOF3a_5kFm26vtUMpcjuhDrTpgo'
+    // credentials: 'AIzaSyA9xkY5mOF3a_5kFm26vtUMpcjuhDrTpgo'
+    credentials: require("./google-creds.json").key
     // other options...
   })
     .then(({ Sheet1 }) => {
