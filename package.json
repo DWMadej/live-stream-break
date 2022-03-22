@@ -24,8 +24,6 @@
     "electron-packager": "^15.4.0"
   },
   "dependencies": {
-    "looks-same": "^3.3.0",
-    "spreadsheet-to-json": "^2.0.0",
-    "timr": "^2.0.0"
+    "spreadsheet-to-json": "^2.0.0"
   }
 }
